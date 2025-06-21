@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Nuevo Cajero</title>
+</head>
+
+<body>
+    <h1>Registrar nuevo cajero</h1>
+
+    <form th:action="@{/cajero/nuevoCajero}" method="post">
+        <label for="ubicacion">Ubicación del cajero:</label>
+        <input type="text" id="ubicacion" name="ubicacion" required>
+        <button type="submit">Crear</button>
+    </form>
+</body>
+
+</html>
