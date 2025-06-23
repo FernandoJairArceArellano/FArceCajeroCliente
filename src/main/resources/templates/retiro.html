@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultra.net.nz/thyemeleaf/layout"
+    layout:decorate="~{layout}">
+
+<head>
+    <title layout:fragment="title">Retiro de Dinero</title>
+    <style>
+        .atm-container {
+            max-width: 400px;
+            margin: auto;
+            background-color: #1a1a1a;
+            color: #00ff00;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .atm-container h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .atm-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .atm-form input[type="number"] {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            background-color: #000;
+            color: #00ff00;
+        }
+
+        .atm-form button {
+            width: 100%;
+            background-color: #00ff00;
+            color: #000;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .atm-form button:hover {
+            background-color: #00cc00;
+        }
+
+        .atm-result {
+            margin-top: 2rem;
+            background-color: #000;
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+        }
+
+        .success {
+            color: #00ff00;
+        }
+    </style>
+</head>
+
+<body>
+    <section layout:fragment="content" class="container mt-5">
+        <div class="atm-container">
+            <h2>RETIRO DE EFECTIVO</h2>
+
+            <form class="atm-form" th:action="@{/cajero/retirar}" method="post">
+                <input type="hidden" name="idcajero" th:value="${idcajero}" />
+                <label for="monto">Ingrese el monto:</label>
+                <input type="number" id="monto" name="monto" step="0.01" min="0" required />
+                <button type="submit">CONFIRMAR</button>
+            </form>
+
+            <div th:if="${resultado != null}" class="atm-result">
+                <div th:if="${resultado.correct}" class="success">
+                    <h4>Dinero entregado:</h4>
+                    <ul>
+                        <li th:each="entrega : ${resultado.objects}">
+                            <span th:text="'$' + entrega.denominacion + ' x ' + entrega.cantidad"></span>
+                        </li>
+                    </ul>
+                </div>
+                <div th:unless="${resultado.correct}" class="error">
+                    <h4 th:text="${resultado.errorMessasge}">No se puede realizar el retiro.</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

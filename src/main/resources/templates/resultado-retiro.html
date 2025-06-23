@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultra.net.nz/thyemeleaf/layout"
+    layout:decorate="~{layout}">
+
+<head>
+    <title layout:fragment="title">Resultado del Retiro</title>
+    <style>
+        .atm-result {
+            max-width: 400px;
+            margin: auto;
+            background-color: #000;
+            color: #00ff00;
+            padding: 2rem;
+            border-radius: 1rem;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+        }
+
+        .success {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <section layout:fragment="content">
+        <div class="atm-result">
+            <div th:if="${mensaje == null}">
+                <h3>Retiro procesado</h3>
+                <p><strong>Dinero entregado:</strong></p>
+                <ul th:each="item : ${resultado.objects}">
+                    <li
+                        th:text="${'[' + item['cantidad'] + '] ' + (item['tipo'] == 'Billete' ? 'Billetes' : 'Monedas') + ' de $' + item['denominacion']}">
+                    </li>
+                </ul>
+            </div>
+
+            <div th:if="${mensaje != null}" class="error">
+                <h3>❌ Error</h3>
+                <p th:text="${mensaje}"></p>
+            </div>
+
+            <div style="text-align: center; margin-top: 1rem;">
+                <a href="/cajero" style="color: #00ff00;">← Volver al menú</a>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

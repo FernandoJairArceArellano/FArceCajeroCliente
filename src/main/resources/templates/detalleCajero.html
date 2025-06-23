@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultra.net.nz/thyemeleaf/layout"
+    layout:decorate="~{layout}">
+
+<head>
+    <title layout:fragment="title">Detalle Cajero</title>
+</head>
+
+<body>
+    <section layout:fragment="content">
+        <h1>Detalles del cajero</h1>
+
+        <div th:if="${#lists.isEmpty(datos)}">
+            <p>No se encontraron datos.</p>
+        </div>
+
+        <div th:if="${!#lists.isEmpty(datos)}">
+            <p><strong>ID Cajero:</strong> <span th:text="${datos[0].idcajero}"></span></p>
+            <p><strong>Ubicación:</strong> <span th:text="${datos[0].ubicacion}"></span></p>
+            <p><strong>Saldo:</strong> <span th:text="${datos[0].saldo}"></span></p>
+            <h4>Inventario</h4>
+            <table class="table table-striped table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID Inventario</th>
+                        <th>Denominación</th>
+                        <th>Cantidad</th>
+                        <th>Tipo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="i : ${datos}">
+                        <td th:text="${i.idinventario}">0</td>
+                        <td th:text="${i.denominacion}">0.00</td>
+                        <td th:text="${i.cantidad}">0</td>
+                        <td th:text="${i.tipo}">Tipo</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</body>
+
+</html>

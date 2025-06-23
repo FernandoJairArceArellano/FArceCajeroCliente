@@ -1,18 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultra.net.nz/thyemeleaf/layout"
+    layout:decorate="~{layout}">
 
 <head>
-    <title>Nuevo Cajero</title>
+    <title layout:fragment="title">Nuevo Cajero</title>
 </head>
 
 <body>
-    <h1>Registrar nuevo cajero</h1>
+    <section layout:fragment="content">
+        <h1>Registrar nuevo cajero</h1>
 
-    <form th:action="@{/cajero/nuevoCajero}" method="post">
-        <label for="ubicacion">Ubicación del cajero:</label>
-        <input type="text" id="ubicacion" name="ubicacion" required>
-        <button type="submit">Crear</button>
-    </form>
+        <form th:action="@{/cajero/nuevoCajero}" method="post">
+            <label for="ubicacion">Ubicación del cajero:</label>
+            <input type="text" id="ubicacion" name="ubicacion" required>
+            <button type="submit">Crear</button>
+        </form>
+    </section>
 </body>
 
 </html>

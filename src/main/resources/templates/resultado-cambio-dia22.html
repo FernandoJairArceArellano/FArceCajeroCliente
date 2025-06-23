@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Simular cambio de día</title>
+</head>
+
+<body>
+
+    <form th:action="@{/cajero/cliente/simularCambioDia}" method="get">
+        <button type="submit">🕒 Simular cambio de día</button>
+    </form>
+
+    <div th:if="${mensaje != null}">
+        <h3 th:text="${mensaje}"></h3>
+    </div>
+
+    <a th:href="@{/cajero}">← Volver al menú</a>
+
+</body>
+
+</html>
