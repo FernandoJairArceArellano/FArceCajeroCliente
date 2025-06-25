@@ -6,7 +6,7 @@
     <title layout:fragment="title">Resultado del Retiro</title>
     <style>
         .atm-result {
-            max-width: 400px;
+            max-width: 380px;
             margin: auto;
             background-color: #000;
             color: #00ff00;
@@ -27,28 +27,60 @@
 </head>
 
 <body>
-    <section layout:fragment="content">
-        <div class="atm-result">
-            <div th:if="${mensaje == null}">
-                <h3>Retiro procesado</h3>
-                <p><strong>Dinero entregado:</strong></p>
-                <ul th:each="item : ${resultado.objects}">
-                    <li
-                        th:text="${'[' + item['cantidad'] + '] ' + (item['tipo'] == 'Billete' ? 'Billetes' : 'Monedas') + ' de $' + item['denominacion']}">
-                    </li>
-                </ul>
-            </div>
+    <section layout:fragment="content" class="container mt-5">
+        <div class="col-12 mb-3">
+            <a th:href="@{/cajero}" class="btn btn-outline-dark">
+                <i class="bi bi-arrow-left"></i> Volver al inicio
+            </a>
+        </div>
 
-            <div th:if="${mensaje != null}" class="error">
-                <h3>❌ Error</h3>
-                <p th:text="${mensaje}"></p>
-            </div>
+        <div class="atm-wrapper" style="position: relative; max-width: 920px; margin: auto;">
+            <!-- Imagen del cajero -->
+            <img src="https://img.freepik.com/vector-gratis/pantalla-cajero-automatico-ilustracion-monitor-cajero-automatico_1441-3923.jpg?semt=ais_hybrid&w=740"
+                alt="ATM" style="width: 100%; display: block; border-radius: 1rem;" />
 
-            <div style="text-align: center; margin-top: 1rem;">
-                <a href="/cajero" style="color: #00ff00;">← Volver al menú</a>
+            <!-- Contenedor de resultados posicionado sobre la pantalla del cajero -->
+            <div class="atm-result" style="
+                    position: absolute;
+                    top: 33%;
+                    left: 16.5%;
+                    width: 51%;
+                    height: 320px;
+                    overflow-y: auto;
+                    background-color: #000;
+                    color: #00ff00;
+                    padding: 2rem;
+                    border-radius: 1rem;
+                    font-family: 'Courier New', Courier, monospace;
+                    box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+                    text-align: center;">
+
+                <div th:if="${mensaje == null}">
+                    <h3>Retiro procesado</h3>
+                    <p><strong>Dinero entregado:</strong></p>
+                    <ul th:each="elemento : ${resultado.objects}" style="list-style: none; padding-left: 0;">
+                        <li
+                            th:text="'[' + ${elemento.cantidad} + '] ' + (${#strings.equalsIgnoreCase(elemento.tipo, 'billete')} ? 'Billetes' : 'Monedas') + ' de $' + ${elemento.denominacion}">
+                        </li>
+                    </ul>
+                </div>
+
+                <div th:if="${mensaje != null}" style="color: red;">
+                    <h3>❌ Error</h3>
+                    <p th:text="${mensaje}"></p>
+                </div>
+
+                <div style="margin-top: 1rem;">
+                    <a href="javascript:history.back();" style="color: #00ff00;">← Volver al menú</a>
+                </div>
             </div>
         </div>
     </section>
+    <script>
+        function regresar() {
+            window.history.back();
+        }
+    </script>
 </body>
 
 </html>
