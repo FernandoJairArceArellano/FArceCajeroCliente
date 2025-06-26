@@ -5,14 +5,30 @@
 <head>
     <title layout:fragment="title">Retiro de Dinero</title>
     <style>
+        .atm-wrapper {
+            position: relative;
+            max-width: 920px;
+            margin: auto;
+        }
+
+        .atm-image {
+            width: 100%;
+            display: block;
+            border-radius: 1rem;
+        }
+
         .atm-container {
             max-width: 380px;
             height: 320px;
             margin: auto;
             overflow-y: auto;
-            background-color: #1a1a1a;
+            position: absolute;
+            top: 33%;
+            left: 16.5%;
+            width: 41%;
+            background-color: #000;
             color: #00ff00;
-            padding: 2rem;
+            padding: 1.5rem;
             border-radius: 1rem;
             box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
             font-family: 'Courier New', Courier, monospace;
@@ -20,7 +36,7 @@
 
         .atm-container h2 {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
         }
 
         .atm-form label {
@@ -54,7 +70,7 @@
         }
 
         .atm-result {
-            margin-top: 2rem;
+            margin-top: 1rem;
             background-color: #000;
             padding: 1rem;
             border-radius: 0.5rem;
@@ -68,6 +84,39 @@
         .success {
             color: #00ff00;
         }
+
+        .teclado-atm {
+            position: absolute;
+            top: 68%;
+            left: 22.5%;
+            width: 31%;
+            background-color: #b0b0b0;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+        }
+
+        .btn-atm {
+            background-color: #e0e0e0;
+            color: #000;
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.5rem;
+            padding: 0.75rem 0;
+            border: 2px solid #666;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+        .btn-atm:hover {
+            background-color: #d0d0d0;
+            transform: scale(1.03);
+        }
+
+        .btn-atm:active {
+            background-color: #bbb;
+            transform: scale(0.98);
+        }
     </style>
 </head>
 
@@ -79,39 +128,22 @@
             </a>
         </div>
 
-        <div class="atm-wrapper" style="position: relative; max-width: 920px; margin: auto;">
-
+        <div class="atm-wrapper">
             <img src="https://img.freepik.com/vector-gratis/pantalla-cajero-automatico-ilustracion-monitor-cajero-automatico_1441-3923.jpg?semt=ais_hybrid&w=740"
-                alt="ATM" style="width: 100%; display: block; border-radius: 1rem;" />
+                alt="ATM" class="atm-image" />
 
-            <div class="atm-container" style="
-                position: absolute;
-                top: 33%;
-                left: 16.5%;
-                width: 51%;
-                background-color: #000;
-                color: #00ff00;
-                padding: 1.5rem;
-                border-radius: 1rem;
-                box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
-                font-family: 'Courier New', Courier, monospace;
-            ">
-                <h2 style="text-align: center; margin-bottom: 1rem;">RETIRO DE EFECTIVO</h2>
+            <div class="atm-container">
+                <h2>RETIRO DE EFECTIVO</h2>
 
                 <form class="atm-form" th:action="@{/cajero/retirar}" method="post">
                     <input type="hidden" name="idcajero" th:value="${idcajero}" />
                     <label for="monto">Ingrese el monto:</label>
-                    <input type="number" id="monto" name="monto" min="1" required
-                        style="width: 100%; padding: 0.5rem; margin-bottom: 1rem; border-radius: 0.5rem; border: none; background-color: #000; color: #00ff00;" />
-                    <button type="submit"
-                        style="width: 100%; background-color: #00ff00; color: #000; padding: 0.75rem; border: none; border-radius: 0.5rem; font-weight: bold; cursor: pointer;">
-                        CONFIRMAR
-                    </button>
+                    <input type="number" id="monto" name="monto" min="1" required />
+                    <button type="submit">CONFIRMAR</button>
                 </form>
 
-                <div th:if="${resultado != null}"
-                    style="margin-top: 1rem; background-color: #000; padding: 1rem; border-radius: 0.5rem;">
-                    <div th:if="${resultado.correct}" style="color: #00ff00;">
+                <div th:if="${resultado != null}" class="atm-result">
+                    <div th:if="${resultado.correct}" class="success">
                         <h4>Dinero entregado:</h4>
                         <ul>
                             <li th:each="entrega : ${resultado.objects}">
@@ -119,12 +151,86 @@
                             </li>
                         </ul>
                     </div>
-                    <div th:unless="${resultado.correct}" style="color: red; text-align: center;">
+                    <div th:unless="${resultado.correct}" class="error">
                         <h4 th:text="${resultado.errorMessasge}">No se puede realizar el retiro.</h4>
                     </div>
                 </div>
             </div>
+
+            <div class="teclado-atm">
+                <div class="container text-center">
+                    <div class="row g-2">
+                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
+                                onclick="appendNumber('1')">1</button></div>
+                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
+                                onclick="appendNumber('2')">2</button></div>
+                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
+                                onclick="appendNumber('3')">3</button></div>
+                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
+                                onclick="appendNumber('4')">4</button></div>
+                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
+                                onclick="appendNumber('5')">5</button></div>
+                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
+                                onclick="appendNumber('6')">6</button></div>
+                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
+                                onclick="appendNumber('7')">7</button></div>
+                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
+                                onclick="appendNumber('8')">8</button></div>
+                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
+                                onclick="appendNumber('9')">9</button></div>
+                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
+                                onclick="clearInput()">←</button></div>
+                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
+                                onclick="appendNumber('0')">0</button></div>
+                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
+                                onclick="resetInput()">C</button></div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const montoInput = document.getElementById("monto");
+                montoInput.focus();
+
+                document.addEventListener("keydown", function (e) {
+                    const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'];
+                    const isAllowedKey = allowedKeys.includes(e.key);
+
+                    if (isAllowedKey) {
+                        e.preventDefault();
+                        if (e.key === '.' && montoInput.value.includes('.')) return;
+                        montoInput.value += e.key;
+                    }
+
+                    if (e.key === 'Backspace') {
+                        e.preventDefault();
+                        montoInput.value = montoInput.value.slice(0, -1);
+                    }
+
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        montoInput.form.submit();
+                    }
+                });
+            });
+
+            function appendNumber(num) {
+                const input = document.getElementById('monto');
+                input.value += num;
+            }
+
+            function clearInput() {
+                const input = document.getElementById('monto');
+                input.value = input.value.slice(0, -1);
+            }
+
+            function resetInput() {
+                const input = document.getElementById('monto');
+                input.value = '';
+            }
+        </script>
     </section>
 </body>
 

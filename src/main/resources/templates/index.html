@@ -69,10 +69,19 @@
                         <td th:text="${cajero.saldo}"></td>
                         <td th:text="${cajero.ubicacion}"></td>
                         <td>
-                            <a th:href="@{/cajero/detalle/{id}(id=${cajero.idcajero})}"
-                                class="btn btn-primary btn-lg"><i class="bi bi-eye"></i></a>
-                            <a th:href="@{/cajero/retirar/{idcajero}(idcajero=${cajero.idcajero})}"
-                                class="btn btn-success btn-lg"><i class="bi bi-cash-coin"></i></a>
+                            <div class="d-flex justify-content-center gap-2 flex-wrap">
+                                <a th:href="@{/cajero/detalle/{id}(id=${cajero.idcajero})}"
+                                    class="btn btn-primary btn-lg mb-2">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+
+                                <a th:href="@{/cajero/retirar/{idcajero}(idcajero=${cajero.idcajero})}"
+                                    th:class="'btn btn-success btn-lg mb-2' + (${cajero.saldo} == 0 ? ' disabled' : '')"
+                                    th:attr="style=${cajero.saldo} == 0 ? 'pointer-events: none; opacity: 0.6;' : null"
+                                    th:title="${cajero.saldo} == 0 ? 'Sin saldo disponible' : null">
+                                    <i class="bi bi-cash-coin"></i>
+                                </a>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -100,9 +109,9 @@
                     if (saldo === 0) {
                         $(this).find("td:eq(1)").css({ color: "red", fontWeight: "bold" });
                     } else if (saldo <= 6275) {
-                        $(this).find("td:eq(1)").css({color: "orange", fontWeight: "bold"});
+                        $(this).find("td:eq(1)").css({ color: "orange", fontWeight: "bold" });
                     } else if (saldo > 6275) {
-                        $(this).find("td:eq(1)").css({color: "green", fontWeight: "bold"});
+                        $(this).find("td:eq(1)").css({ color: "green", fontWeight: "bold" });
                     }
                 });
             });
