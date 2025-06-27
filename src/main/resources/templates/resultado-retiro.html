@@ -29,7 +29,7 @@
 <body>
     <section layout:fragment="content" class="container mt-5">
         <div class="col-12 mb-3">
-            <a th:href="@{/cajero}" class="btn btn-outline-dark">
+            <a th:href="@{/cajero/index}" class="btn btn-outline-dark">
                 <i class="bi bi-arrow-left"></i> Volver al inicio
             </a>
         </div>
@@ -80,7 +80,20 @@
         function regresar() {
             window.history.back();
         }
+        // fetch("http://localhost:8081/auth/status", {
+        //     credentials: "include"
+        // })
+        //     .then(response => {
+        //         if (!response.ok) {
+        //             window.location.href = "/Usuario";
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.error("Error al verificar autenticación:", error);
+        //         window.location.href = "/Usuario";
+        //     });
     </script>
+
 </body>
 
 </html>

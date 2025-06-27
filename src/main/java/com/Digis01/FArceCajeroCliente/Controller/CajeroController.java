@@ -4,9 +4,14 @@ import com.Digis01.FArceCajeroCliente.ML.Cajero;
 import com.Digis01.FArceCajeroCliente.ML.Result;
 import com.Digis01.FArceCajeroCliente.ML.CajeroInventario;
 import com.Digis01.FArceCajeroCliente.ML.ItemEntregado;
+import com.Digis01.FArceCajeroCliente.ML.Usuario;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,12 +30,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/cajero")
 public class CajeroController {
 
+    @Autowired
+    private HttpServletRequest request;
+
     String urlBase = "http://localhost:8081/cajeroapi/v1";
 
-    private RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @GetMapping("/index")
-    public String Index(Model model) {
+    public String Index(Model model, Usuario usuario) {
         ResponseEntity<Result<Cajero>> responseEntity = restTemplate.exchange(
                 urlBase + "/todos",
                 HttpMethod.GET,
@@ -40,6 +48,9 @@ public class CajeroController {
         });
         Result respuestaCajero = responseEntity.getBody();
 
+        if (usuario != null) {
+            model.addAttribute("username", usuario.getUserName());
+        }
         model.addAttribute("cajeros", respuestaCajero.objects);
 
         return "index";
@@ -81,14 +92,34 @@ public class CajeroController {
     }
 
     @PostMapping("/retirar")
-    public String procesarRetiro(@RequestParam int idcajero, @RequestParam double monto, Model model) {
+    public String procesarRetiro(@RequestParam int idcajero, @RequestParam double monto,
+            Model model, HttpServletRequest request) {
         try {
+            // Obtener cookie JSESSIONID
+            String jsessionId = null;
+            if (request.getCookies() != null) {
+                for (Cookie cookie : request.getCookies()) {
+                    if ("JSESSIONID".equals(cookie.getName())) {
+                        jsessionId = cookie.getValue();
+                        break;
+                    }
+                }
+            }
+
+            HttpHeaders headers = new HttpHeaders();
+            if (jsessionId != null) {
+                headers.add("Cookie", "JSESSIONID=" + jsessionId);
+            }
+
+            HttpEntity<Void> entity = new HttpEntity<>(headers);
+
             ResponseEntity<Result<ItemEntregado>> response = restTemplate.exchange(
                     urlBase + "/retirar/" + idcajero + "/" + monto,
                     HttpMethod.POST,
-                    null,
+                    entity,
                     new ParameterizedTypeReference<Result<ItemEntregado>>() {
-            });
+            }
+            );
 
             Result<ItemEntregado> resultado = response.getBody();
 
@@ -141,10 +172,28 @@ public class CajeroController {
         return "index";
     }
 
-    @GetMapping("/detalle/simularCambioDia/{id}")
+    @PostMapping("/detalle/simularCambioDia/{id}")
     public String simularCambioDiaParaCajero(@PathVariable int id, RedirectAttributes redirectAttributes) {
         try {
-            ResponseEntity<String> response = restTemplate.getForEntity(urlBase + "/simularCambioDia/" + id, String.class);
+            HttpHeaders headers = new HttpHeaders();
+
+            // Reenviar cookies de sesión
+            if (request.getCookies() != null) {
+                for (Cookie cookie : request.getCookies()) {
+                    if ("JSESSIONID".equals(cookie.getName())) {
+                        headers.add("Cookie", "JSESSIONID=" + cookie.getValue());
+                    }
+                }
+            }
+
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            ResponseEntity<String> response = restTemplate.exchange(
+                    urlBase + "/simularCambioDia/" + id,
+                    HttpMethod.GET,
+                    entity,
+                    String.class);
+
             redirectAttributes.addFlashAttribute("alertMessage", response.getBody());
             redirectAttributes.addFlashAttribute("alertType", "success");
         } catch (HttpClientErrorException | HttpServerErrorException ex) {

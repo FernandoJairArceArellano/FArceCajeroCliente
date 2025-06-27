@@ -31,7 +31,7 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <form th:action="@{/cajero/detalle/simularCambioDia/{id}(id=${datos[0].idcajero})}" method="get">
+                    <form th:action="@{/cajero/detalle/simularCambioDia/{id}(id=${datos[0].idcajero})}" method="post">
                         <button type="submit" class="btn btn-warning btn-lg mb-3"><i class="bi bi-arrow-clockwise"></i>
                             Rellenar Cajero</button>
                     </form>
@@ -121,6 +121,19 @@
                     }
                 });
             });
+
+            // fetch("http://localhost:8081/auth/status", {
+            //     credentials: "include"
+            // })
+            //     .then(response => {
+            //         if (!response.ok) {
+            //             window.location.href = "/Usuario";
+            //         }
+            //     })
+            //     .catch(error => {
+            //         console.error("Error al verificar autenticación:", error);
+            //         window.location.href = "/Usuario";
+            //     });
         </script>
     </section>
 </body>

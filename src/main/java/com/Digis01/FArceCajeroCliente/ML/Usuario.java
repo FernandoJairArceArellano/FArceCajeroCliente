@@ -1,5 +1,6 @@
 package com.Digis01.FArceCajeroCliente.ML;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Usuario {
@@ -15,14 +16,15 @@ public class Usuario {
     private String telefono;
     private String nCelular;
     private int status;
-    private Rol Rol;
+    private Rol rol;
+    private BigDecimal saldo;
 
-    public int getIdRol() {
+    public int getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdRol(int idRol) {
-        this.idUsuario = idRol;
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public String getNombre() {
@@ -106,10 +108,19 @@ public class Usuario {
     }
 
     public Rol getRol() {
-        return Rol;
+        return rol;
     }
 
     public void setRol(Rol Rol) {
-        this.Rol = Rol;
+        this.rol = Rol;
     }
+
+    public BigDecimal getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(BigDecimal saldo) {
+        this.saldo = saldo;
+    }
+
 }

@@ -7,7 +7,7 @@
     <style>
         .atm-wrapper {
             position: relative;
-            max-width: 920px;
+            max-width: 1000px;
             margin: auto;
         }
 
@@ -18,14 +18,14 @@
         }
 
         .atm-container {
-            max-width: 380px;
-            height: 320px;
+            max-width: 400px;
+            height: 330px;
             margin: auto;
             overflow-y: auto;
             position: absolute;
-            top: 33%;
-            left: 16.5%;
-            width: 41%;
+            top: 34%;
+            left: 17.5%;
+            width: 48%;
             background-color: #000;
             color: #00ff00;
             padding: 1.5rem;
@@ -44,7 +44,7 @@
             margin-bottom: 0.5rem;
         }
 
-        .atm-form input[type="number"] {
+        .atm-form input[type="text"] {
             width: 100%;
             padding: 0.5rem;
             margin-bottom: 1rem;
@@ -87,9 +87,9 @@
 
         .teclado-atm {
             position: absolute;
-            top: 68%;
-            left: 22.5%;
-            width: 31%;
+            top: 70%;
+            left: 26.8%;
+            width: 35%;
             background-color: #b0b0b0;
             font-family: 'Courier New', Courier, monospace;
             padding: 0.75rem;
@@ -138,7 +138,7 @@
                 <form class="atm-form" th:action="@{/cajero/retirar}" method="post">
                     <input type="hidden" name="idcajero" th:value="${idcajero}" />
                     <label for="monto">Ingrese el monto:</label>
-                    <input type="number" id="monto" name="monto" min="1" required />
+                    <input type="text" id="monto" name="monto" pattern="^\d+(\.\d{1,2})?$" required />
                     <button type="submit">CONFIRMAR</button>
                 </form>
 
@@ -160,30 +160,45 @@
             <div class="teclado-atm">
                 <div class="container text-center">
                     <div class="row g-2">
-                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
+                        <!-- Fila 1 -->
+                        <div class="col-3"><button type="button" class="btn-atm btn w-100"
                                 onclick="appendNumber('1')">1</button></div>
-                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
+                        <div class="col-3"><button type="button" class="btn-atm btn w-100"
                                 onclick="appendNumber('2')">2</button></div>
-                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
+                        <div class="col-3"><button type="button" class="btn-atm btn w-100"
                                 onclick="appendNumber('3')">3</button></div>
-                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
+                        <div class="col-3"> <button type="button" class="btn-atm btn w-100 h-100"></button></div>
+
+                        <!-- Fila 2 -->
+                        <div class="col-3"><button type="button" class="btn-atm btn w-100"
                                 onclick="appendNumber('4')">4</button></div>
-                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
+                        <div class="col-3"><button type="button" class="btn-atm btn w-100"
                                 onclick="appendNumber('5')">5</button></div>
-                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
+                        <div class="col-3"><button type="button" class="btn-atm btn w-100"
                                 onclick="appendNumber('6')">6</button></div>
-                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
-                                onclick="appendNumber('7')">7</button></div>
-                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
-                                onclick="appendNumber('8')">8</button></div>
-                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
-                                onclick="appendNumber('9')">9</button></div>
-                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
-                                onclick="clearInput()">←</button></div>
-                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
-                                onclick="appendNumber('0')">0</button></div>
-                        <div class="col-4"><button type="button" class="btn-atm btn w-100"
+                        <div class="col-3"><button type="button" class="btn btn-danger w-100 h-100"
                                 onclick="resetInput()">C</button></div>
+                        <!-- Fila 3 -->
+
+                        <div class="col-3"><button type="button" class="btn-atm btn w-100"
+                                onclick="appendNumber('7')">7</button></div>
+                        <div class="col-3"><button type="button" class="btn-atm btn w-100"
+                                onclick="appendNumber('8')">8</button></div>
+                        <div class="col-3"><button type="button" class="btn-atm btn w-100"
+                                onclick="appendNumber('9')">9</button></div>
+                        <div class="col-3"><button type="button" class="btn btn-warning w-100 h-100"
+                                onclick="clearInput()">←</button></div>
+
+                        <!-- Fila 4 -->
+                        <div class="col-3"><button type="button" class="btn-atm btn w-100"
+                                onclick="appendNumber('.')">.</button></div>
+                        <div class="col-3"><button type="button" class="btn-atm btn w-100"
+                                onclick="appendNumber('0')">0</button></div>
+                        <div class="col-3"><button type="button" class="btn-atm btn w-100"
+                                onclick="appendNumber('00')">00</button></div>
+                        <div class="col-3"><button type="button" class="btn-atm btn w-100"
+                                onclick="appendNumber('000')">000</button></div>
+
                     </div>
                 </div>
             </div>
@@ -196,9 +211,7 @@
 
                 document.addEventListener("keydown", function (e) {
                     const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'];
-                    const isAllowedKey = allowedKeys.includes(e.key);
-
-                    if (isAllowedKey) {
+                    if (allowedKeys.includes(e.key)) {
                         e.preventDefault();
                         if (e.key === '.' && montoInput.value.includes('.')) return;
                         montoInput.value += e.key;
@@ -211,13 +224,18 @@
 
                     if (e.key === 'Enter') {
                         e.preventDefault();
-                        montoInput.form.submit();
+                        if (parseFloat(montoInput.value) >= 0.5) {
+                            montoInput.form.submit();
+                        } else {
+                            alert("El monto mínimo es $0.5");
+                        }
                     }
                 });
             });
 
             function appendNumber(num) {
                 const input = document.getElementById('monto');
+                if (num === '.' && input.value.includes('.')) return;
                 input.value += num;
             }
 
@@ -231,6 +249,7 @@
                 input.value = '';
             }
         </script>
+
     </section>
 </body>
 
