@@ -20,7 +20,7 @@
         <!-- Encabezado -->
         <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
-                <a class="navbar-brand" th:href="@{/cajero}">Risosu IT</a>
+                <a class="navbar-brand" th:href="@{/cajero/index}">Risosu IT</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -31,6 +31,13 @@
                         <!-- <li class="nav-item"><a class="nav-link" th:href="@{/cajero/nuevoCajeroForm}">Inaugurar
                                 cajero</a></li> -->
                     </ul>
+                </div>
+
+                <!-- Botón de cerrar sesion -->
+                <div class="d-flex align-items-center order-0 order-lg-1 ms-lg-3 mt-2 mt-lg-0">
+                    <form th:action="@{http://localhost:8081/logout}" method="post" class="m-0">
+                        <button type="submit" class="btn btn-danger"><i class="bi bi-box-arrow-right"></i></button>
+                    </form>
                 </div>
             </div>
         </nav>

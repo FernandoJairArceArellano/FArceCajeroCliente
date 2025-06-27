@@ -8,6 +8,24 @@
 
 <body>
     <section layout:fragment="content">
+        <div class="container">
+            <div sec:authorize="isAuthenticated()">
+                Bienvenido, usuario autenticado.
+            </div>
+
+            <div sec:authorize="hasRole('Administrador')">
+                Este contenido solo lo ven los programadores.
+            </div>
+
+            <div sec:authorize="hasRole('Comprador')">
+                Este contenido solo lo ven los administradores.
+            </div>
+
+            <div sec:authorize="hasRole('Usuario')">
+                Este contenido lo ven los usuarios analistas.
+            </div>
+        </div>
+
         <div class="container mt-4 mb-4 t-5">
             <div th:if="${alertMessage}" th:class="'alert alert-' + ${alertType} + ' alert-dismissible fade show'"
                 role="alert">
@@ -115,6 +133,19 @@
                     }
                 });
             });
+
+            fetch("http://localhost:8081/auth/status", {
+                credentials: "include"
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        window.location.href = "/Usuario/iniciarSesion";
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al verificar autenticación:", error);
+                    window.location.href = "/Usuario/iniciarSesion";
+                });
         </script>
     </section>
 </body>

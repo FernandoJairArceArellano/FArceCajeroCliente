@@ -29,7 +29,7 @@ public class CajeroController {
 
     private RestTemplate restTemplate = new RestTemplate();
 
-    @GetMapping
+    @GetMapping("/index")
     public String Index(Model model) {
         ResponseEntity<Result<Cajero>> responseEntity = restTemplate.exchange(
                 urlBase + "/todos",
